@@ -1,0 +1,6 @@
+verilog work "../../../../../verilog/7segdisplay/7SegDisplay.v"
+verilog work "../../../../../picoversat/rtl/src/xregf.v"
+verilog work "../../../../../picoversat/rtl/src/xram.v"
+verilog work "../../../../../picoversat/rtl/src/xctrl.v"
+verilog work "../../../../rtl/src/xaddr_decoder.v"
+verilog work "../../../../rtl/src/xtop.v"

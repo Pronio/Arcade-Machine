@@ -1,0 +1,62 @@
+##Ignore all
+#*
+#
+##Unignore all with extension
+#!*.*
+#
+##Unignore all dirs
+#!*/
+#
+#####Above code ignores all files without extension####
+
+
+#General temp files ignore
+*~
+
+#Ignore tests
+xdict.json
+program.hex
+*#
+
+#Ignore simulation files
+*.vcd
+*.hex
+xtop
+*.out
+
+#Ignore xilinx files
+iseconfig 
+_xmsgs 
+*.html 
+*.ncd 
+*.syr 
+*.par 
+*.xml 
+*.cmd_log 
+*.ngc 
+*.ngr 
+*.stx 
+*.xrpt
+xst 
+xtop.bgn
+xtop.drc
+xtop_map.ngm
+xtop_pad.txt
+xtop.twr
+_ngo
+webtalk.log 
+xtop.bit 
+xtop.lso 
+xtop.ngd 
+xtop.pcf
+xtop.twx
+xtop.xpi
+xlnx_auto_0_xdb
+xtop_bitgen.xwbt
+xtop_map.map
+xtop.pad
+xtop.bld
+xtop_map.mrp
+xtop_pad.csv
+xtop.ptwx
+xtop.unroutes

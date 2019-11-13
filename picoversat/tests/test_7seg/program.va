@@ -1,0 +1,20 @@
+# 
+# Hello World!
+#
+#	a simple picoVersat program
+#
+#   assign regC = {negative, overflow, {(`DATA_W-3){1'b0}}, carry};
+
+	ldi 100
+	wrw R1
+loop 	ldi 1
+	wrw SCORE_BASE
+#	ldi 1000000 #implimentation version
+	ldi 10000 #test bench version
+loop1   bneqi loop1
+	nop
+	rdw R1
+	bneqi loop
+	wrw R1
+loop2   beqi loop2
+	wrw TRAP_BASE
