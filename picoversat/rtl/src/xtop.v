@@ -18,6 +18,8 @@ module xtop (
 
 	     , output [3:0]	  an,
 	     output [6:0]	  seg,
+	     input                PS2C,
+	     input                PS2D,
 	     output 		  dp
 	     );
 
@@ -69,6 +71,7 @@ module xtop (
    //Auxiliar
    wire				  rst_out;
    wire [7:0]			  cathode_aux;
+   wire 			  valid;
 
    assign dp = cathode_aux[7];
    assign seg = cathode_aux[6:0];
@@ -127,6 +130,8 @@ module xtop (
 	                       // input select and address
                                .sel(data_sel),
 	                       .addr(data_addr),
+
+			       .valid(valid),
                                
                                //memory 
 	                       .mem_sel(mem_sel),
@@ -171,6 +176,16 @@ module xtop (
 		   .anode(an),
 		   .rst_out(rst_out)
 		   );
+
+	module PS2(
+  		.clk(clk),             // Input clock, 50MHz
+  		.rst(rst),             // Reset signal
+  		.ps2Clk(PS2C),          // PS/2 input clock, 10-16.7MHz
+  		.ps2Data(PS2D),         // PS/2 data
+  		.code(), // Code that was detected
+  		.valid(valid)       // Whether output data is valid or not
+  	);
+
 
 
    
