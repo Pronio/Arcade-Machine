@@ -5,8 +5,6 @@
 #
 #   assign regC = {negative, overflow, {(`DATA_W-3){1'b0}}, carry};
 
-	ldi 100
-	wrw R1
 paddle	ldi 0
 	rdw PADDLE_BASE
         beqi paddle
@@ -17,8 +15,7 @@ loop 	ldi 1
 	ldi 10000 #test bench version
 loop1   bneqi loop1
 	nop
-	rdw R1
-	bneqi paddle
-	wrw R1
-loop2   beqi loop2
+	ldi 0
+	beqi paddle
+	nop
 	wrw TRAP_BASE
