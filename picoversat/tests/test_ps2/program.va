@@ -9,7 +9,7 @@
 	wrw R1
 paddle	ldi 0
 	rdw PADDLE_BASE
-        bneqi paddle
+        beqi paddle
 	nop
 loop 	ldi 1
 	wrw SCORE_BASE
