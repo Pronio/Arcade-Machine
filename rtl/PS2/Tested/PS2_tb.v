@@ -37,7 +37,7 @@ module PS2_tb;
 		// Wait 100 ns for global reset to finish
 		#100;
 
-      #45 ps2Data = 0; //START 0
+      		#45 ps2Data = 0; //START 0
 		#5 ps2Clk = 0;
 		#50 ps2Clk = 1;
 

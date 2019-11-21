@@ -8,7 +8,7 @@ module paddleController
   parameter FRAME_WIDTH = 10,      // Size of the border
   parameter MOTION_STEP = 10,      // How many pixels the paddle move each time
   parameter BOTTOM_POS = SCREEN_HEIGHT - (PADDLE_LENGTH + FRAME_WIDTH), // Bottom limit to where paddle can go
-  parameter COUNT = 1000) ( // Value used in a counter, in order to create a signal
+  parameter COUNT = 500000) ( // Value used in a counter, in order to create a signal, default is every 10ms
                             // in a certain time in order to increase/decrease
                             // paddle positions
   input clk,             // Input clock, 50MHz
@@ -20,7 +20,10 @@ module paddleController
   );
 
   reg [$clog2(COUNT) : 0] counter = 0;
-  reg breakCode;
+  reg [15 : 0] resetCounter = 0;
+  reg breakCode = 0;
+  reg incPaddle1, decPaddle1; // Incremente or decrease Paddle 1 position
+  reg incPaddle2, decPaddle2; // Incremente or decrease Paddle 2 position
   wire [7 : 0] code;
   wire valid;
 
@@ -31,11 +34,6 @@ module paddleController
   // Player 2 keys
   wire [7:0] O = 8'h44;	         // O key code
   wire [7:0] L = 8'h4B;          // L key code
-
-  //wire [7:0] ARROW_LEFT = 8'h6B;
-  //wire [7:0] ARROW_RIGHT = 8'h74;
-  //wire [7:0] EXTENDED = 8'hE0;	//codes
-  //wire [7:0] RELEASED = 8'hF0;
 
   PS2 keyboard (
     .clk(clk),
@@ -48,20 +46,93 @@ module paddleController
 
   // Create signal every clk/COUNT in order to increment/decrement paddle positions
   always @(posedge clk) begin
-    if(rst) begin
+    if(rst)   // Reset to default values
       counter <= 0;
-      paddle1 <= START_POS;
-      paddle2 <= START_POS;
-    end else if(counter == COUNT)
+    else if(counter == COUNT)
       counter <= 0;
     else
       counter <= counter + 1;
   end
 
+  // Reset counter for when a break code is recieved but if in a given time
+  // the rest of the code is not received, reset breakCode
+  always @(posedge clk) begin
+    if(rst)   // Reset to default values
+      resetCounter <= 0;
+    else if(resetCounter[15])
+      resetCounter <= 0;
+    else
+      resetCounter <= resetCounter + 1;
+  end
+
   //check if a new code has been outputted by the PS2 module
   always @(posedge clk) begin
-    if(valid) begin
+    if(rst) begin   // Reset to default value
+      breakCode <= 0;
+      incPaddle1 <= 0;
+      decPaddle1 <= 0;
+      incPaddle2 <= 0;
+      incPaddle2 <= 0;
+    end else if(resetCounter[15])
+      breakCode <= 0;
+    end else if(valid) begin
+      if(code == BREAK_CODE)
+        breakCode <= 1;
+      else if(code == W) begin
+        if(breakCode) begin
+          breakCode <= 0;
+          incPaddle1 <= 0;
+        end else begin
+          incPaddle1 <= 1;
+          decPaddle1 <= 0;
+        end
+      end else if(code == S) begin
+        if(breakCode) begin
+          breakCode <= 0;
+          decPaddle1 <= 0;
+        end else begin
+          incPaddle1 <= 0;
+          decPaddle1 <= 1;
+        end
+      end else if(code == O) begin
+        if(breakCode) begin
+          breakCode <= 0;
+          incPaddle2 <= 0;
+        end else begin
+          incPaddle2 <= 1;
+          decPaddle2 <= 0;
+        end
+      end else if(code == L) begin
+        if(breakCode) begin
+          breakCode <= 0;
+          decPaddle2 <= 0;
+        end else begin
+          incPaddle2 <= 0;
+          decPaddle2 <= 1;
+        end
+      end
+    end
+  end
 
+  // Increment/Decrease Paddle positions depending on the keys that are pressed
+  always @(posedge clk) begin
+    if(rst) begin   // Reset to default values
+      paddle1 <= START_POS;
+      paddle2 <= START_POS;
+    end else if(counter == COUNT) begin
+      if(incPaddle1) begin
+        if(paddle1 + MOTION_STEP <= BOTTOM_POS)
+          paddle1 <= paddle1 + MOTION_STEP;
+      end else if(decPaddle1) begin
+        if(paddle1 - MOTION_STEP >= FRAME_WIDTH)
+          paddle1 <= paddle1 - MOTION_STEP;
+      end else if(incPaddle2) begin
+        if(paddle2 + MOTION_STEP <= BOTTOM_POS)
+          paddle2 <= paddle2 + MOTION_STEP;
+      end else if(decPaddle2) begin
+        if(paddle2 - MOTION_STEP >= FRAME_WIDTH)
+          paddle2 <= paddle2 - MOTION_STEP;
+      end
     end
   end
 
