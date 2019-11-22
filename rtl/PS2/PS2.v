@@ -20,9 +20,9 @@ module PS2(
   always @(posedge clk) begin
     if(rst) begin
       counter <= 0;
-      valid <= 0;
-      code <= 0;
-      bitsReceived <= 0;
+      //valid <= 0;
+      //code <= 0;
+      //bitsReceived <= 0;
     end else if(counter[10])
       counter <= 0;
     else

@@ -23,7 +23,7 @@ run
 -slice_utilization_ratio 100
 -bram_utilization_ratio 100
 -verilog2001 YES
--vlgincdir { "/home/pedro/ecomp/Arcade-Machine/my_picoversat/rtl/include" }
+-vlgincdir { "/home/pedro/ecomp/Arcade-Machine/picoversat/rtl/include" }
 -fsm_extract YES -fsm_encoding Auto
 -safe_implementation No
 -fsm_style LUT

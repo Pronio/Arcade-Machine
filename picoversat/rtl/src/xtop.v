@@ -177,7 +177,7 @@ module xtop (
 		   .rst_out(rst_out)
 		   );
 
-	module PS2(
+	PS2 keyboard(
   		.clk(clk),             // Input clock, 50MHz
   		.rst(rst),             // Reset signal
   		.ps2Clk(PS2C),          // PS/2 input clock, 10-16.7MHz
