@@ -31,6 +31,7 @@ module PS2(
       valid <= 0;
       code <= 0;
       bitsReceived <= 0;
+      // dataRead <= 0;  // dataRead doesn't need to be reset since, if a good message is reeived, all bits are changed
     end else if(counter[10]) begin
       if(!ps2Clk) begin                   // "Data sent from the device to the host is...
         if(ps2Clk != previousClk) begin   // ...read on the falling edge of the clock signal"
@@ -49,11 +50,10 @@ module PS2(
           code <= dataRead[8:1];
           valid <= 1;
         end
-      end else begin
+      end else
 	     valid <= 0;
-       previousClk <= ps2Clk;
-      end
+      previousClk <= ps2Clk;
     end
   end
-
+  
 endmodule

@@ -20,10 +20,12 @@ module paddleController
   );
 
   reg [$clog2(COUNT) : 0] counter = 0;
-  reg [15 : 0] resetCounter = 0;
+  reg [16 : 0] resetCounter = 0;
   reg breakCode = 0;
-  reg incPaddle1, decPaddle1; // Incremente or decrease Paddle 1 position
-  reg incPaddle2, decPaddle2; // Incremente or decrease Paddle 2 position
+  reg incPaddle1 = 0, decPaddle1 = 0; // Incremente or decrease Paddle 1 position
+  reg incPaddle2 = 0, decPaddle2 = 0; // Incremente or decrease Paddle 2 position
+  reg readEn = 0;
+  reg lastValid = 0;
   wire [7 : 0] code;
   wire valid;
 
@@ -56,13 +58,16 @@ module paddleController
 
   // Reset counter for when a break code is recieved but if in a given time
   // the rest of the code is not received, reset breakCode
+  // A new key takes up to 1.1ms to be recieved
   always @(posedge clk) begin
     if(rst)   // Reset to default values
       resetCounter <= 0;
-    else if(resetCounter[15])
+    else if(resetCounter[16] || !breakCode)
       resetCounter <= 0;
-    else
-      resetCounter <= resetCounter + 1;
+    else begin
+      if(breakCode)
+        resetCounter <= resetCounter + 1;
+    end
   end
 
   //check if a new code has been outputted by the PS2 module
@@ -73,12 +78,12 @@ module paddleController
       decPaddle1 <= 0;
       incPaddle2 <= 0;
       incPaddle2 <= 0;
-    end else if(resetCounter[15])
+    end else if(resetCounter[16])
       breakCode <= 0;
-    end else if(valid) begin
+    else if(readEn) begin
       if(code == BREAK_CODE)
         breakCode <= 1;
-      else if(code == W) begin
+      else if(code == S) begin
         if(breakCode) begin
           breakCode <= 0;
           incPaddle1 <= 0;
@@ -86,7 +91,7 @@ module paddleController
           incPaddle1 <= 1;
           decPaddle1 <= 0;
         end
-      end else if(code == S) begin
+      end else if(code == W) begin
         if(breakCode) begin
           breakCode <= 0;
           decPaddle1 <= 0;
@@ -94,7 +99,7 @@ module paddleController
           incPaddle1 <= 0;
           decPaddle1 <= 1;
         end
-      end else if(code == O) begin
+      end else if(code == L) begin
         if(breakCode) begin
           breakCode <= 0;
           incPaddle2 <= 0;
@@ -102,7 +107,7 @@ module paddleController
           incPaddle2 <= 1;
           decPaddle2 <= 0;
         end
-      end else if(code == L) begin
+      end else if(code == O) begin
         if(breakCode) begin
           breakCode <= 0;
           decPaddle2 <= 0;
@@ -134,6 +139,20 @@ module paddleController
           paddle2 <= paddle2 - MOTION_STEP;
       end
     end
+  end
+
+  always @(posedge clk) begin
+    if(rst) begin
+      readEn <= 0;
+      lastValid <= 0;
+    end else if(valid && !lastValid) begin
+      readEn <= 1;
+      lastValid <= 1;
+    end else if(valid && lastValid)
+      readEn <= 0;
+    else if(!valid && lastValid)
+      lastValid <= 0;
+
   end
 
   endmodule
