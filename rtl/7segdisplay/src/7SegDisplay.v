@@ -130,22 +130,22 @@ module segDisplay (
          2'b00: 
 	 begin
             anode <= 4'b1110; 
-            displayValue <= scorePlayer2_2;
+            displayValue <= scorePlayer1_1;
          end
          2'b01: 
 	 begin
             anode <= 4'b1101; 
-            displayValue <= scorePlayer2_1;
+            displayValue <= scorePlayer1_2;
          end
          2'b10: 
 	 begin
             anode <= 4'b1011; 
-            displayValue <= scorePlayer1_2;
+            displayValue <= scorePlayer2_1;
          end
          2'b11: 
 	 begin
             anode <= 4'b0111; 
-            displayValue <= scorePlayer1_1;
+            displayValue <= scorePlayer2_2;
          end
          default: 
 	 begin
