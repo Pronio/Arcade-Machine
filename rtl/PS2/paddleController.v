@@ -87,54 +87,54 @@ module paddleController
         if(breakCode) begin
           breakCode <= 0;
           incPaddle1 <= 0;
-        end else begin
+        end else
           incPaddle1 <= 1;
-          decPaddle1 <= 0;
-        end
       end else if(code == W) begin
         if(breakCode) begin
           breakCode <= 0;
           decPaddle1 <= 0;
-        end else begin
-          incPaddle1 <= 0;
+        end else
           decPaddle1 <= 1;
-        end
       end else if(code == L) begin
         if(breakCode) begin
           breakCode <= 0;
           incPaddle2 <= 0;
-        end else begin
+        end else
           incPaddle2 <= 1;
-          decPaddle2 <= 0;
-        end
       end else if(code == O) begin
         if(breakCode) begin
           breakCode <= 0;
           decPaddle2 <= 0;
-        end else begin
-          incPaddle2 <= 0;
+        end else
           decPaddle2 <= 1;
-        end
       end
     end
   end
 
-  // Increment/Decrease Paddle positions depending on the keys that are pressed
+  // Increment/Decrease Paddle 1 position depending on the keys that are pressed
   always @(posedge clk) begin
     if(rst) begin   // Reset to default values
       paddle1 <= START_POS;
-      paddle2 <= START_POS;
     end else if(counter == COUNT) begin
-      if(incPaddle1) begin
+      if(incPaddle1 && !decPaddle1) begin
         if(paddle1 + MOTION_STEP <= BOTTOM_POS)
           paddle1 <= paddle1 + MOTION_STEP;
-      end else if(decPaddle1) begin
+      end else if(decPaddle1 && !incPaddle1) begin
         if(paddle1 - MOTION_STEP >= FRAME_WIDTH)
           paddle1 <= paddle1 - MOTION_STEP;
-      end else if(incPaddle2) begin
+      end
+    end
+  end
+
+  // Increment/Decrease Paddle 2 position depending on the keys that are pressed
+  always @(posedge clk) begin
+    if(rst) begin   // Reset to default values
+      paddle2 <= START_POS;
+    end else if(counter == COUNT) begin
+      if(incPaddle2 && !decPaddle2) begin
         if(paddle2 + MOTION_STEP <= BOTTOM_POS)
           paddle2 <= paddle2 + MOTION_STEP;
-      end else if(decPaddle2) begin
+      end else if(decPaddle2 && !incPaddle2) begin
         if(paddle2 - MOTION_STEP >= FRAME_WIDTH)
           paddle2 <= paddle2 - MOTION_STEP;
       end
