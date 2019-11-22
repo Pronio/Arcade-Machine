@@ -18,19 +18,21 @@ module PS2(
   // Create signal every clk/1000 (50kHz) in order to verify the PS/2 inputs
   // This signal needs to be greater than 2 x PS/2 clock = 33.4kHz
   always @(posedge clk) begin
-    if(rst) begin
+    if(rst)
       counter <= 0;
-      valid <= 0;
-      code <= 0;
-      bitsReceived <= 0;
-    end else if(counter[4])
+    else if(counter[10])
       counter <= 0;
     else
       counter <= counter + 1;
   end
 
   always @(posedge clk) begin
-    if(counter[4]) begin
+    if(rst) begin   // Reset to default values
+      valid <= 0;
+      code <= 0;
+      bitsReceived <= 0;
+      // dataRead <= 0;  // dataRead doesn't need to be reset since, if a good message is reeived, all bits are changed
+    end else if(counter[10]) begin
       if(!ps2Clk) begin                   // "Data sent from the device to the host is...
         if(ps2Clk != previousClk) begin   // ...read on the falling edge of the clock signal"
           dataRead[10:0] <= {ps2Data, dataRead[10:1]};	// add up the data received by shifting bits and adding one new bit
@@ -49,7 +51,7 @@ module PS2(
           valid <= 1;
         end
       end else
-	  valid <= 0;
+	     valid <= 0;
       previousClk <= ps2Clk;
     end
   end
