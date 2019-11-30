@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
 
-module object_detection (
-	input		 	 clk,
-	input		 	 rst,
-	input		 	 sel,
+module vgadisplay (
+	input			 clk,
+	input			 rst,
+	input			 sel,
 	input  [1:0] 	 addr,
 	input  [9:0]   	 data_in,
 	output reg		 HS,
@@ -17,8 +17,8 @@ module object_detection (
 	wire [9:0] y_pos;
 	wire [4:0] detected;
 	wire display_en;
-	reg hs_1;
-	reg vs_1;
+	wire hs_1;
+	wire vs_1;
 
 	reg [8:0] ball_x;
 	reg [9:0] ball_y;
@@ -94,8 +94,8 @@ module object_detection (
 		.y_pos(y_pos),
 		.Px(ball_x),
 		.Py(ball_y),
-		.W(10),
-		.H(10),
+		.W(10'd10),
+		.H(9'd10),
         .detected(detected[4])
 		);
 
@@ -103,9 +103,9 @@ module object_detection (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.Px(paddle_1),
-		.Py(30),
-		.W(10),
-		.H(40),
+		.Py(10'd30),
+		.W(10'd10),
+		.H(9'd40),
         .detected(detected[3])
 		);
 
@@ -113,26 +113,26 @@ module object_detection (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.Px(paddle_2),
-		.Py(600),
-		.W(10),
-		.H(40),
+		.Py(10'd600),
+		.W(10'd10),
+		.H(9'd40),
         .detected(detected[2])
 		);
 
 	object_detection middle_line (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
-		.Px(0),
-		.Py(317),
-		.W(6),
-		.H(480),
+		.Px(9'd0),
+		.Py(10'd317),
+		.W(10'd6),
+		.H(9'd480),
         .detected(detected[1])
 		);
 
 	frame_detection frame (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
-		.W(10),
+		.W(6'd10),
         .detected(detected[0])
 		);
 
