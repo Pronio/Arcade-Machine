@@ -20,7 +20,12 @@ module xtop (
 	     output [6:0]	  seg,
 	     input                PS2C,
 	     input                PS2D,
-	     output 		  dp
+	     output 		  dp,
+             output               HSYNC,
+             output               VSYNC,
+             output [2:0]         OutRed,
+             output [2:0]         OutGreen,
+             output [1:0]         OutBlue
 	     );
 
    //
@@ -54,6 +59,7 @@ module xtop (
 `endif
 
    wire				  score_sel;
+   wire				  display_sel;
 
 `ifndef NO_EXT
    wire                           ext_sel;
@@ -71,7 +77,8 @@ module xtop (
    //Auxiliar
    wire				  rst_out;
    wire [7:0]			  cathode_aux;
-   wire 			  valid;
+   wire [8:0]			  paddle1;
+   wire [8:0]			  paddle2;
 
    assign dp = cathode_aux[7];
    assign seg = cathode_aux[6:0];
@@ -130,8 +137,6 @@ module xtop (
 	                       // input select and address
                                .sel(data_sel),
 	                       .addr(data_addr),
-
-			       .valid(valid),
                                
                                //memory 
 	                       .mem_sel(mem_sel),
@@ -156,8 +161,16 @@ module xtop (
                                
                                //data output 
                                .data_to_rd(data_to_rd),
+                               
+                               //score 7segment
+			       .score_sel(score_sel),
 
-			       .score_sel(score_sel)
+                               //object display
+                               .object_sel(display_sel),
+
+                               //paddle ps2
+                               .paddle1(paddle1),
+                               .paddle2(paddle2)
                                );
    
    //
@@ -177,14 +190,28 @@ module xtop (
 		   .rst_out(rst_out)
 		   );
 
-	PS2 keyboard(
+   paddleController keyboard(
   		.clk(clk),             // Input clock, 50MHz
   		.rst(rst),             // Reset signal
   		.ps2Clk(PS2C),          // PS/2 input clock, 10-16.7MHz
   		.ps2Data(PS2D),         // PS/2 data
-  		.code(), // Code that was detected
-  		.valid(valid)       // Whether output data is valid or not
+  		.paddle1(paddle1),
+  		.paddle2(paddle2)       
   	);
+
+    vgadisplay display(
+                .clk(clk),
+                .rst(rst),
+                .sel(display_sel & data_we),
+                .addr(data_addr[`OBJECT_ADDR_W-1:0]),
+                .data_in(data_to_wr[9:0]),
+                .HS(HSYNC),
+                .VS(VSYNC),
+                .red(OutRed),
+                .green(OutGreen),
+                .blue(OutBlue) 
+        ); 
+
 
 
 

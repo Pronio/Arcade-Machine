@@ -5,7 +5,7 @@
 module xtop_tb;
    
    //parameters 
-   parameter clk_period = 10;
+   parameter clk_period = 20;
 
    //
    // Interface signals
@@ -25,6 +25,16 @@ module xtop_tb;
    wire [3:0]	      an;
    wire [6:0]         seg;
    wire 	      dp;
+
+   reg                ps2Clk;
+   reg                ps2Data;
+
+   wire               HSYNC;
+   wire               VSYNC;
+   wire [2:0]         OutRed;
+   wire [2:0]         OutGreen;
+   wire [1:0]         OutBlue;
+
 
    //iterator and timer
    integer 		   k, start_time;
@@ -48,9 +58,306 @@ module xtop_tb;
 
 	     , .an(an),
 	     .seg(seg),
-	     .dp(dp)
+	     .dp(dp),
+             .PS2C(ps2Clk),
+             .PS2D(ps2Data),
+             .HSYNC(HSYNC),
+             .VSYNC(VSYNC),
+             .OutRed(OutRed),
+             .OutGreen(OutGreen),
+             .OutBlue(OutBlue)
 	     );
    
+	task oKey;
+		begin
+			#45000 ps2Data = 0; //START 0
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //1
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //2
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //3
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //4
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //5
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //6
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //7
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //8
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //PARITY 9
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1;// STOP 10
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+		end
+	endtask
+
+	task lKey;
+		begin
+			#45000 ps2Data = 0; //START 0
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //1
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //2
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //3
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //4
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //5
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //6
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //7
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //8
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //PARITY 9
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1;// STOP 10
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+		end
+	endtask
+
+
+	task wKey;
+		begin
+			#45000 ps2Data = 0; //START 0
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //1
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //2
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //3
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //4
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //5
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //6
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //7
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //8
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //PARITY 9
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1;// STOP 10
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+		end
+	endtask
+
+	task sKey;
+		begin
+			#45000 ps2Data = 0; //START 0
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //1
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //2
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //3
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //4
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //5
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //6
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //7
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //8
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //PARITY 9
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1;// STOP 10
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+		end
+	endtask
+
+	task breakCode;
+		begin
+			#45000 ps2Data = 0; //START 0
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //1
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //2
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //3
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //4
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //5
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //6
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //7
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //8
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //PARITY 9
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1;// STOP 10
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+		end
+	endtask
+
+	task randKey;
+		begin
+			#45000 ps2Data = 0; //START 0
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //1
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //2
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //3
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //4
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //5
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //6
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1; //7
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //8
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 0; //PARITY 9
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+
+			#45000 ps2Data = 1;// STOP 10
+			#5000 ps2Clk = 0;
+			#50000 ps2Clk = 1;
+		end
+	endtask
+
+
    initial begin
       
 `ifdef DEBUG
@@ -60,7 +367,9 @@ module xtop_tb;
         
       // Initialize Inputs
       clk = 1;
-      rst = 0;  
+      rst = 0;
+      ps2Clk = 1;
+      ps2Data = 1;  
       
      // assert reset for 1 clock cycle
       #(clk_period+1)
@@ -72,6 +381,20 @@ module xtop_tb;
       // Run picoVersat
       //
       start_time = $time;
+
+      #20000000;
+      wKey();
+      lKey();
+      oKey();
+      #12000000;
+      breakCode();
+      wKey();
+      #2000000;
+      breakCode();
+      oKey();
+      #2400000;
+      breakCode();
+      lKey();
 
 
       //

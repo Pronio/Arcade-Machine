@@ -27,16 +27,16 @@
 `define REGF_BASE 1024 //registers 0x4000
 `define REGF_ADDR_W 4 //2**4 = 16 registers
 
-`define OBJECT_BASE 1040 //registers 0x4000
+`define OBJECT_BASE 1044 //registers 0x4000
 `define OBJECT_ADDR_W 2 //2**2 = 4 registers
 
-`define PADDLE_BASE 1044 //registers 0x4000
+`define PADDLE_BASE 1048 //registers 0x4000
 `define PADDLE_ADDR_W 1 //2**1 = 2 registers
 
-`define SCORE_BASE 1046 //registers 0x4000
+`define SCORE_BASE 1050 //registers 0x4000
 `define SCORE_ADDR_W 1 //2**1 = 2 registers
 
-`define START_BASE 1048 //registers 0x4000
+`define START_BASE 1052 //registers 0x4000
 `define START_ADDR_W 1 //2**1 = 2 registers
 
 

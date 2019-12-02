@@ -11,7 +11,8 @@ OTHER_SRC := ../../../rtl
 XDEFS := $(wildcard $(INCLUDE_DIR)/*.vh)
 SRC := $(wildcard $(SRC_DIR)/*.v) \
 $(wildcard $(OTHER_SRC)/7segdisplay/src/*.v)\
-$(OTHER_SRC)/PS2/PS2.v
+$(wildcard $(OTHER_SRC)/PS2/src/*.v) \
+$(wildcard $(OTHER_SRC)/vgadisplay/src/*.v)
  
 TB := ../../rtl/testbench/xtop_tb.v
 

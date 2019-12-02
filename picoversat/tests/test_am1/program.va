@@ -1,0 +1,37 @@
+# 
+# Hello World!
+#
+#	a simple picoVersat program
+#
+#   assign regC = {negative, overflow, {(`DATA_W-3){1'b0}}, carry};
+
+	ldi 300000          #simulatiom runtime
+	wrw R15
+	ldi 1              #inicialization of the ball position
+	addi OBJECT_BASE
+	wrw RB
+	ldi 100
+	wrw R1
+	wrw R2
+	wrw OBJECT_BASE
+	wrwb
+mainl 	ldi 2              #update of paddle1 position
+	addi OBJECT_BASE
+	wrw RB
+	rdw PADDLE_BASE
+	wrwb
+	ldi 1              #update of paddle2 postion
+	addi PADDLE_BASE
+	wrw RB
+	rdwb
+	wrw R3
+	ldi 3
+	addi OBJECT_BASE
+	wrw RB
+	rdw R3
+	wrwb
+	rdw R15            #simulation runtime loop
+	bneqi mainl
+	wrw R15
+	beqi mainl         #end simulation continue implementation
+	wrw TRAP_BASE
