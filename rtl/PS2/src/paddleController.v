@@ -34,7 +34,9 @@ module paddleController
   endfunction
 
   reg [clog2(COUNT) : 0] counter = 0;
-  reg [16 : 0] resetCounter = 0;
+  //reg [16 : 0] resetCounter = 0;
+  //Problem while testing...seems that 16 is not enough
+  reg [17 : 0] resetCounter = 0;
   reg breakCode = 0;
   reg incPaddle1 = 0, decPaddle1 = 0; // Incremente or decrease Paddle 1 position
   reg incPaddle2 = 0, decPaddle2 = 0; // Incremente or decrease Paddle 2 position
@@ -70,7 +72,9 @@ module paddleController
   always @(posedge clk) begin
     if(rst)   // Reset to default values
       resetCounter <= 0;
-    else if(resetCounter[16] || !breakCode)
+    //else if(resetCounter[16] || !breakCode)
+    //Problem while testing...seems that 16 is not enough
+    else if(resetCounter[17] || !breakCode)
       resetCounter <= 0;
     else begin
       if(breakCode)
@@ -86,7 +90,9 @@ module paddleController
       decPaddle1 <= 0;
       incPaddle2 <= 0;
       incPaddle2 <= 0;
-    end else if(resetCounter[16])
+    //end else if(resetCounter[16])
+    //Problem while testing...seems that 16 is not enough
+    end else if(resetCounter[17])
       breakCode <= 0;
     else if(readEn) begin
       if(code == BREAK_CODE)
