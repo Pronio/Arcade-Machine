@@ -144,26 +144,16 @@ module vgadisplay
 	begin
 		if (rst)
 			HS<=0;
-<<<<<<< HEAD
 		else
-			HS=hs_1;
-=======
-		else 
 			HS<=hs_1;
->>>>>>> bcaa00bcba6f32c00ee36eb552f7cd58ef2cd697
    	end
 
 	always @ (posedge clk)
 	begin
 		if (rst)
 			VS<=0;
-<<<<<<< HEAD
 		else
-			VS=vs_1;
-=======
-		else 
 			VS<=vs_1;
->>>>>>> bcaa00bcba6f32c00ee36eb552f7cd58ef2cd697
    	end
 
 
@@ -194,6 +184,6 @@ always @ (posedge clk)
 			green <= 3'b000;
 			blue <= 2'b00;
 		end
-   	end
+	end
 
 endmodule
