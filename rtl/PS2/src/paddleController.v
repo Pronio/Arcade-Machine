@@ -2,7 +2,11 @@
 
 module paddleController
   // Parameter dimensions to set paddles motion are in pixels
-  #(parameter SCREEN_HEIGHT = 480, // Total screen height, in pixels
+  #(parameter PLAYER1_UP_KEY = 8'h1D, // W key as default
+  parameter PLAYER1_DOWN_KEY = 8'h1B, // S key as default
+  parameter PLAYER2_UP_KEY = 8'h44, // O key as default
+  parameter PLAYER2_DOWN_KEY = 8'h4B, // L key as default
+  parameter SCREEN_HEIGHT = 480, // Total screen height, in pixels
   parameter PADDLE_LENGTH = 40,    // Total length of each one of the paddles
   parameter START_POS = (SCREEN_HEIGHT - PADDLE_LENGTH)/2, //Starting position of the paddles
   parameter FRAME_WIDTH = 10,      // Size of the border
@@ -31,11 +35,11 @@ module paddleController
 
   wire [7:0] BREAK_CODE = 8'hF0; // Break code
   // Player 1 keys
-  wire [7:0] W = 8'h1D;	         // Q key code
-  wire [7:0] S = 8'h1B;          // S key code
+  //wire [7:0] W = 8'h1D;	         // W key code
+  //wire [7:0] S = 8'h1B;          // S key code
   // Player 2 keys
-  wire [7:0] O = 8'h44;	         // O key code
-  wire [7:0] L = 8'h4B;          // L key code
+  //wire [7:0] O = 8'h44;	         // O key code
+  //wire [7:0] L = 8'h4B;          // L key code
 
   PS2 keyboard (
     .clk(clk),
@@ -83,25 +87,25 @@ module paddleController
     else if(readEn) begin
       if(code == BREAK_CODE)
         breakCode <= 1;
-      else if(code == S) begin
+      else if(code == PLAYER1_DOWN_KEY) begin
         if(breakCode) begin
           breakCode <= 0;
           incPaddle1 <= 0;
         end else
           incPaddle1 <= 1;
-      end else if(code == W) begin
+      end else if(code == PLAYER1_UP_KEY) begin
         if(breakCode) begin
           breakCode <= 0;
           decPaddle1 <= 0;
         end else
           decPaddle1 <= 1;
-      end else if(code == L) begin
+      end else if(code == PLAYER2_DOWN_KEY) begin
         if(breakCode) begin
           breakCode <= 0;
           incPaddle2 <= 0;
         end else
           incPaddle2 <= 1;
-      end else if(code == O) begin
+      end else if(code == PLAYER2_UP_KEY) begin
         if(breakCode) begin
           breakCode <= 0;
           decPaddle2 <= 0;
