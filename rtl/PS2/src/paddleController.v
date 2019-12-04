@@ -12,18 +12,28 @@ module paddleController
   parameter FRAME_WIDTH = 10,      // Size of the border
   parameter MOTION_STEP = 10,      // How many pixels the paddle move each time
   parameter BOTTOM_POS = SCREEN_HEIGHT - (PADDLE_LENGTH + FRAME_WIDTH), // Bottom limit to where paddle can go
-  parameter COUNT = 12500000) ( // Value used in a counter, in order to create a signal, default is every 100ms
+  parameter COUNT = 12500000) ( // Value used in a counter, in order to create a signal, default is every 250ms
                             // in a certain time in order to increase/decrease
                             // paddle positions
   input clk,             // Input clock, 50MHz
   input rst,             // Reset signal
   input ps2Clk,          // PS/2 input clock, 10-16.7MHz
   input ps2Data,         // PS/2 data
-  output reg [$clog2(BOTTOM_POS)-1 : 0] paddle1, // Position in each the Paddle 1 is
-  output reg [$clog2(BOTTOM_POS)-1 : 0] paddle2  // Position in each the Paddle 2 is
+  output reg [clog2(BOTTOM_POS)-1 : 0] paddle1, // Position in each the Paddle 1 is
+  output reg [clog2(BOTTOM_POS)-1 : 0] paddle2  // Position in each the Paddle 2 is
   );
 
-  reg [$clog2(COUNT) : 0] counter = 0;
+  //Solution from https://www.xilinx.com/support/answers/44586.html for clog2
+  function integer clog2;
+    input integer value;
+    begin
+      value = value-1;
+      for (clog2=0; value>0; clog2=clog2+1)
+        value = value>>1;
+    end
+  endfunction
+
+  reg [clog2(COUNT) : 0] counter = 0;
   reg [16 : 0] resetCounter = 0;
   reg breakCode = 0;
   reg incPaddle1 = 0, decPaddle1 = 0; // Incremente or decrease Paddle 1 position
