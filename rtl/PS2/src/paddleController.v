@@ -12,7 +12,7 @@ module paddleController
   parameter FRAME_WIDTH = 10,      // Size of the border
   parameter MOTION_STEP = 10,      // How many pixels the paddle move each time
   parameter BOTTOM_POS = SCREEN_HEIGHT - (PADDLE_LENGTH + FRAME_WIDTH), // Bottom limit to where paddle can go
-  parameter COUNT = 500000) ( // Value used in a counter, in order to create a signal, default is every 10ms
+  parameter COUNT = 12500000) ( // Value used in a counter, in order to create a signal, default is every 100ms
                             // in a certain time in order to increase/decrease
                             // paddle positions
   input clk,             // Input clock, 50MHz
