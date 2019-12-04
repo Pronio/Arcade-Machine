@@ -34,12 +34,6 @@ module paddleController
   wire valid;
 
   wire [7:0] BREAK_CODE = 8'hF0; // Break code
-  // Player 1 keys
-  //wire [7:0] W = 8'h1D;	         // W key code
-  //wire [7:0] S = 8'h1B;          // S key code
-  // Player 2 keys
-  //wire [7:0] O = 8'h44;	         // O key code
-  //wire [7:0] L = 8'h4B;          // L key code
 
   PS2 keyboard (
     .clk(clk),
