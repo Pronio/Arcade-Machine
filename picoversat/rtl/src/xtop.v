@@ -25,7 +25,7 @@ module xtop (
              output               VSYNC,
              output [2:0]         OutRed,
              output [2:0]         OutGreen,
-             output [1:0]         OutBlue
+             output [2:0]         OutBlue
 	     );
 
    //
@@ -209,8 +209,10 @@ module xtop (
                 .VS(VSYNC),
                 .red(OutRed),
                 .green(OutGreen),
-                .blue(OutBlue) 
+                .blue(OutBlue[2:1]) 
         ); 
+		  
+		  assign OutBlue[0]=0;
 
 
 

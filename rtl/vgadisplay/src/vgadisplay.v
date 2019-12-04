@@ -144,45 +144,55 @@ module vgadisplay
 	begin
 		if (rst)
 			HS<=0;
+<<<<<<< HEAD
 		else
 			HS=hs_1;
+=======
+		else 
+			HS<=hs_1;
+>>>>>>> bcaa00bcba6f32c00ee36eb552f7cd58ef2cd697
    	end
 
 	always @ (posedge clk)
 	begin
 		if (rst)
 			VS<=0;
+<<<<<<< HEAD
 		else
 			VS=vs_1;
+=======
+		else 
+			VS<=vs_1;
+>>>>>>> bcaa00bcba6f32c00ee36eb552f7cd58ef2cd697
    	end
 
 
 always @ (posedge clk)
 	begin
 		if ((detected[4])&&display_en) begin
-			red = 3'b110;
-			green = 3'b000;
-			blue = 2'b00;
+			red <= 3'b110;
+			green <= 3'b000;
+			blue <= 2'b00;
 		end else if ((detected[3])&&display_en) begin
-			red = 3'b000;
-			green = 3'b000;
-			blue = 2'b11;
+			red <= 3'b000;
+			green <= 3'b000;
+			blue <= 2'b11;
 		end else if ((detected[2])&&display_en) begin
-			red = 3'b000;
-			green = 3'b000;
-			blue = 2'b11;
+			red <= 3'b000;
+			green <= 3'b000;
+			blue <= 2'b11;
 		end else if ((detected[1])&&display_en) begin
-			red = 3'b011;
-			green = 3'b011;
-			blue = 2'b01;
+			red <= 3'b011;
+			green <= 3'b011;
+			blue <= 2'b01;
 		end else if ((detected[0])&&display_en) begin
-			red = 3'b011;
-			green = 3'b011;
-			blue = 2'b01;
+			red <= 3'b011;
+			green <= 3'b011;
+			blue <= 2'b01;
 		end else begin
-			red = 3'b000;
-			green = 3'b000;
-			blue = 2'b00;
+			red <= 3'b000;
+			green <= 3'b000;
+			blue <= 2'b00;
 		end
    	end
 
