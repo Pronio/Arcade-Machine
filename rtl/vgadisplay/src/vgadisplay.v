@@ -1,6 +1,10 @@
 `timescale 1ns/1ps
 
-module vgadisplay (
+module vgadisplay
+  // Parameters to set screen output (VGA)
+	#(parameter WIDTH = 640, //Standard screen width is 640ppx
+		parameter HEIGHT = 480 //Standard screen height is 480px
+	)(
 	input			 clk,
 	input			 rst,
 	input			 sel,
@@ -10,8 +14,8 @@ module vgadisplay (
 	output reg		 VS,
 	output reg [2:0] red,
 	output reg [2:0] green,
-	output reg [1:0] blue 
-); 
+	output reg [1:0] blue
+);
 
 	wire [8:0] x_pos;
 	wire [9:0] y_pos;
@@ -31,47 +35,47 @@ module vgadisplay (
 	reg [8:0] paddle_2_1;
 
 	//Object positon registers connected to data bus, waiting to enter the main object postion registers
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst)
 			ball_x_1<=0;
-		else if(sel&&(addr==2'b00)) 
+		else if(sel&&(addr==2'b00))
 			ball_x_1<=data_in[8:0];
    	end
 
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst)
 			ball_y_1<=0;
-		else if(sel&&(addr==2'b01)) 
+		else if(sel&&(addr==2'b01))
 			ball_y_1<=data_in[9:0];
    	end
 
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst)
 			paddle_1_1<=0;
-		else if(sel&&(addr==2'b10)) 
+		else if(sel&&(addr==2'b10))
 			paddle_1_1<=data_in[8:0];
    	end
 
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst)
 			paddle_2_1<=0;
-		else if(sel&&(addr==2'b11)) 
+		else if(sel&&(addr==2'b11))
 			paddle_2_1<=data_in[8:0];
    	end
 
 	//Main object postion registers
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst) begin
 			ball_x<=0;
 			ball_y<=0;
 			paddle_1<=0;
 			paddle_2<=0;
-		end else if((x_pos==479)&&(y_pos==639)) begin
+		end else if((x_pos == HEIGHT - 1)&&(y_pos == WIDTH - 1)) begin
 			ball_x<=ball_x_1;
 			ball_y<=ball_y_1;
 			paddle_1<=paddle_1_1;
@@ -86,7 +90,7 @@ module vgadisplay (
 		.y_pos(y_pos),
 		.display_en(display_en),
 		.hs(hs_1),
-        .vs(vs_1)
+    .vs(vs_1)
 		);
 
 	object_detection ball (
@@ -96,7 +100,7 @@ module vgadisplay (
 		.Py(ball_y),
 		.W(10'd10),
 		.H(9'd10),
-        .detected(detected[4])
+    .detected(detected[4])
 		);
 
 	object_detection paddle1 (
@@ -106,7 +110,7 @@ module vgadisplay (
 		.Py(10'd30),
 		.W(10'd10),
 		.H(9'd40),
-        .detected(detected[3])
+    .detected(detected[3])
 		);
 
 	object_detection paddle2 (
@@ -116,7 +120,7 @@ module vgadisplay (
 		.Py(10'd600),
 		.W(10'd10),
 		.H(9'd40),
-        .detected(detected[2])
+    .detected(detected[2])
 		);
 
 	object_detection middle_line (
@@ -125,35 +129,35 @@ module vgadisplay (
 		.Px(9'd0),
 		.Py(10'd317),
 		.W(10'd6),
-		.H(9'd480),
-        .detected(detected[1])
+		.H(HEIGHT),
+    .detected(detected[1])
 		);
 
 	frame_detection frame (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.W(6'd10),
-        .detected(detected[0])
+    .detected(detected[0])
 		);
 
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst)
 			HS<=0;
-		else 
+		else
 			HS<=hs_1;
    	end
 
-	always @ (posedge clk) 
+	always @ (posedge clk)
 	begin
 		if (rst)
 			VS<=0;
-		else 
+		else
 			VS<=vs_1;
    	end
 
 
-always @ (posedge clk) 
+always @ (posedge clk)
 	begin
 		if ((detected[4])&&display_en) begin
 			red <= 3'b110;
@@ -180,6 +184,6 @@ always @ (posedge clk)
 			green <= 3'b000;
 			blue <= 2'b00;
 		end
-   	end
+	end
 
 endmodule
