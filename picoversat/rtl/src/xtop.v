@@ -190,7 +190,8 @@ module xtop (
 		   .rst_out(rst_out)
 		   );
 
-   paddleController keyboard(
+   paddleController
+   #(.COUNT(5000000), .MOTION_STEP(5) )	keyboard(
   		.clk(clk),             // Input clock, 50MHz
   		.rst(rst),             // Reset signal
   		.ps2Clk(PS2C),          // PS/2 input clock, 10-16.7MHz
