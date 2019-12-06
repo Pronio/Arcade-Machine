@@ -3,13 +3,15 @@
 module vgadisplay
   // Parameters to set screen output (VGA)
 	#(parameter WIDTH = 640, //Standard screen width is 640ppx
-		parameter HEIGHT = 480 //Standard screen height is 480px
+		parameter HEIGHT = 480, //Standard screen height is 480px
+		parameter X_BIT=8,
+		parameter Y_BIT=9
 	)(
 	input			 clk,
 	input			 rst,
 	input			 sel,
 	input  [1:0] 	 addr,
-	input  [9:0]   	 data_in,
+	input  [Y_BIT:0]   	 data_in,
 	output reg		 HS,
 	output reg		 VS,
 	output reg [2:0] red,
@@ -17,22 +19,22 @@ module vgadisplay
 	output reg [1:0] blue
 );
 
-	wire [8:0] x_pos;
-	wire [9:0] y_pos;
+	wire [X_BIT:0] x_pos;
+	wire [Y_BIT:0] y_pos;
 	wire [4:0] detected;
 	wire display_en;
 	wire hs_1;
 	wire vs_1;
 
-	reg [8:0] ball_x;
-	reg [9:0] ball_y;
-	reg [8:0] paddle_1;
-	reg [8:0] paddle_2;
+	reg [X_BIT:0] ball_x;
+	reg [Y_BIT:0] ball_y;
+	reg [X_BIT:0] paddle_1;
+	reg [X_BIT:0] paddle_2;
 
-	reg [8:0] ball_x_1;
-	reg [9:0] ball_y_1;
-	reg [8:0] paddle_1_1;
-	reg [8:0] paddle_2_1;
+	reg [X_BIT:0] ball_x_1;
+	reg [Y_BIT:0] ball_y_1;
+	reg [X_BIT:0] paddle_1_1;
+	reg [X_BIT:0] paddle_2_1;
 
 	//Object positon registers connected to data bus, waiting to enter the main object postion registers
 	always @ (posedge clk)
@@ -40,7 +42,7 @@ module vgadisplay
 		if (rst)
 			ball_x_1<=0;
 		else if(sel&&(addr==2'b00))
-			ball_x_1<=data_in[8:0];
+			ball_x_1<=data_in[X_BIT:0];
    	end
 
 	always @ (posedge clk)
@@ -48,7 +50,7 @@ module vgadisplay
 		if (rst)
 			ball_y_1<=0;
 		else if(sel&&(addr==2'b01))
-			ball_y_1<=data_in[9:0];
+			ball_y_1<=data_in[Y_BIT:0];
    	end
 
 	always @ (posedge clk)
@@ -56,7 +58,7 @@ module vgadisplay
 		if (rst)
 			paddle_1_1<=0;
 		else if(sel&&(addr==2'b10))
-			paddle_1_1<=data_in[8:0];
+			paddle_1_1<=data_in[X_BIT:0];
    	end
 
 	always @ (posedge clk)
@@ -64,7 +66,7 @@ module vgadisplay
 		if (rst)
 			paddle_2_1<=0;
 		else if(sel&&(addr==2'b11))
-			paddle_2_1<=data_in[8:0];
+			paddle_2_1<=data_in[X_BIT:0];
    	end
 
 	//Main object postion registers
@@ -83,61 +85,75 @@ module vgadisplay
 		end
    	end
 
-	vgacontroller controller (
+	vgacontroller #( 
+		.HEIGHT(HEIGHT),
+		.WIDTH(WIDTH)
+		//,.PERIOD_H(1040),
+		//.PULSE_H(120),
+		//.BACK_H(64),
+		//.PERIOD_V(666),
+		//.PULSE_V(6),
+		//.BACK_V(23)
+		) controller (
 		.clk(clk),
 		.rst(rst),
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.display_en(display_en),
 		.hs(hs_1),
-    .vs(vs_1)
+    	.vs(vs_1)
 		);
 
-	object_detection ball (
+	object_detection #(.X_BITS(X_BIT), .Y_BITS(Y_BIT) ) ball (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.Px(ball_x),
 		.Py(ball_y),
 		.W(10'd10),
 		.H(9'd10),
-    .detected(detected[4])
+    		.detected(detected[4])
 		);
 
-	object_detection paddle1 (
+	object_detection #(.X_BITS(X_BIT), .Y_BITS(Y_BIT) ) paddle1 (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.Px(paddle_1),
 		.Py(10'd30),
 		.W(10'd10),
 		.H(9'd40),
-    .detected(detected[3])
+    		.detected(detected[3])
 		);
 
-	object_detection paddle2 (
+	object_detection #(.X_BITS(X_BIT), .Y_BITS(Y_BIT) ) paddle2 (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.Px(paddle_2),
 		.Py(10'd600),
 		.W(10'd10),
 		.H(9'd40),
-    .detected(detected[2])
+    		.detected(detected[2])
 		);
 
-	object_detection middle_line (
+	object_detection #(.X_BITS(X_BIT), .Y_BITS(Y_BIT) ) middle_line (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.Px(9'd0),
 		.Py(10'd317),
 		.W(10'd6),
 		.H(HEIGHT),
-    .detected(detected[1])
+    		.detected(detected[1])
 		);
 
-	frame_detection frame (
+	frame_detection #(
+		.X_BITS(X_BIT), 
+		.Y_BITS(Y_BIT),
+		.WIDTH(WIDTH),
+		.HEIGHT(HEIGHT) 
+		) frame (
 		.x_pos(x_pos),
 		.y_pos(y_pos),
 		.W(6'd10),
-    .detected(detected[0])
+    		.detected(detected[0])
 		);
 
 	always @ (posedge clk)
