@@ -111,7 +111,7 @@ module vgacontroller #(
 	begin
 		if (rst) begin
 			x <= 0;
-		end else if((vertical_counter>=PULSE_V+BACK_V)&&(vertical_counter<PULSE_V+BACK_V+HEIGHT)&&(horizontal_counter==PERIOD_H)&&(clk_divider==0)) begin 
+		end else if((vertical_counter>=PULSE_V+BACK_V)&&(vertical_counter<PULSE_V+BACK_V+HEIGHT)&&(horizontal_counter==PERIOD_H-1)&&(clk_divider==0)) begin 
 			x <= x+1;
 		end else if(vertical_counter==PULSE_V+BACK_V-1) begin
 			x <= 0;

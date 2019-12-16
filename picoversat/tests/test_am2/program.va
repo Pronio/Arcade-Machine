@@ -1,0 +1,152 @@
+# 
+# Hello World!
+#
+#	a simple picoVersat program
+#
+# R1  x_ball
+# R2  y_ball
+# R3  x_paddle1
+# R4  x_paddle2
+# R5  move_direction_left_right
+# R6  move_direction_up_down
+
+#Initializations
+	ldi 300000         #simulatiom runtime
+	wrw R15
+	ldi 100000         #delay time
+	wrw R14	
+	ldi 1              #inicialization of the R0
+	wrw R0
+	ldi 1              #inicialization of R5 and R6
+	wrw R5
+	wrw R6	
+	ldi 1              #inicialization of the ball position
+	addi OBJECT_BASE
+	wrw RB
+	ldi 100
+	wrw R1
+	wrw R2
+	wrw OBJECT_BASE
+	wrwb
+
+#Paddles positions updated on screen and registers 
+mainl 	ldi 2              #update of paddle1 position
+	addi OBJECT_BASE
+	wrw RB
+	rdw PADDLE_BASE
+	wrwb
+	wrw R3
+	ldi 1              #update of paddle2 postion
+	addi PADDLE_BASE
+	wrw RB
+	rdwb
+	wrw R10
+	ldi 3
+	addi OBJECT_BASE
+	wrw RB
+	rdw R10
+	wrwb
+	wrw R4
+
+#delay
+	rdw R14            #delay loop
+	bneqi mainl
+	wrw R14
+	ldi 100000
+	wrw R14
+
+#Ball movement
+	rdw R6             #Move ball x
+	beqi bx_dec
+	rdw R1             #Move ball x+1
+	addi 1
+	wrw R1
+	rdw R0
+	bneqi by
+bx_dec	addi -1            #move ball x-1
+	wrw R1
+by	rdw R5             #move ball y
+	beqi by_dec
+	rdw R2             #move ball y+1
+	addi 1
+	wrw R2
+	rdw R0
+	bneqi b_str
+by_dec	addi -1            #move ball y-1
+	wrw R2
+
+#Ball postion store in display module
+b_str	ldi OBJECT_BASE    #store ball x position for VGA
+	wrw RB
+	rdw R1
+	wrwb
+	ldi 1              #store ball y position for VGA
+	addi OBJECT_BASE
+	wrw RB
+	rdw R2
+	wrwb
+
+#Ball touch top border
+	rdw R1
+	addi -10
+	bneqi bottom
+	rdw R6
+	xor R0
+	wrw R6
+
+#Ball touch bottom border
+bottom	rdw R1
+	addi -458
+	bneqi paddle1
+	rdw R6
+	xor R0
+	wrw R6
+
+#Ball touch paddle1
+paddle1 ldi 0              #negative bit mask
+	ldih -32768
+	wrw R10
+	rdw R2
+	addi -40
+	bneqi paddle2
+	rdw R3
+	sub R1
+	addi -10
+	and R10
+	beqi paddle2
+	rdw R1
+	sub R3
+	addi -40
+	and R10
+	beqi paddle2
+	rdw R5
+	xor R0
+	wrw R5	
+
+#Ball touch paddle2
+paddle2 ldi 0              #negative bit mask
+	ldih -32768
+	wrw R10
+	rdw R2
+	addi -589
+	bneqi end
+	rdw R4
+	sub R1
+	addi -10
+	and R10
+	beqi end
+	rdw R1
+	sub R4
+	addi -40
+	and R10
+	beqi end
+	rdw R5
+	xor R0
+	wrw R5		
+
+#Main loop end
+end	rdw R15            #simulation runtime loop
+	bneqi mainl
+	wrw R15
+	beqi mainl         #end simulation continue implementation
+	wrw TRAP_BASE
