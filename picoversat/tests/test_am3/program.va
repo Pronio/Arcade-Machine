@@ -13,7 +13,7 @@
 #Initializations
 	ldi 300000         #simulatiom runtime
 	wrw R15
-	ldi 100000         #delay time
+	ldi 30000          #delay time
 	wrw R14	
 	ldi 1              #inicialization of the R0
 	wrw R0
@@ -23,11 +23,16 @@
 	ldi 1              #inicialization of the ball position
 	addi OBJECT_BASE
 	wrw RB
-	ldi 100
-	wrw R1
-	wrw R2
+	ldi 230
 	wrw OBJECT_BASE
+	wrw R1
+	ldi 310
+	wrw R2
 	wrwb
+
+#Start register
+start	rdw START_BASE
+	beqi start
 
 #Paddles positions updated on screen and registers 
 mainl 	ldi 2              #update of paddle1 position
@@ -52,7 +57,7 @@ mainl 	ldi 2              #update of paddle1 position
 	rdw R14            #delay loop
 	bneqi mainl
 	wrw R14
-	ldi 100000
+	ldi 30000
 	wrw R14
 
 #Ball movement
@@ -96,7 +101,7 @@ b_str	ldi OBJECT_BASE    #store ball x position for VGA
 
 #Ball touch bottom border
 bottom	rdw R1
-	addi -458
+	addi -459
 	bneqi paddle1
 	rdw R6
 	xor R0
@@ -129,20 +134,41 @@ paddle2 ldi 0              #negative bit mask
 	wrw R10
 	rdw R2
 	addi -589
-	bneqi end
+	bneqi left
 	rdw R4
 	sub R1
 	addi -10
 	and R10
-	beqi end
+	beqi left
 	rdw R1
 	sub R4
 	addi -80
 	and R10
-	beqi end
+	beqi left
 	rdw R5
 	xor R0
-	wrw R5		
+	wrw R5	
+
+#Ball touch left border
+left	rdw R2
+	addi -10
+	bneqi right
+	ldi 310
+	wrw R2             #reset ball to middle
+	ldi 1
+	wrw SCORE_BASE     #increment player2 score
+
+#Ball touch right border
+right	rdw R2
+	addi -630
+	bneqi end
+	ldi 310
+	wrw R2             #reset ball to middle	
+	ldi 1
+	addi SCORE_BASE     #increment player1 score
+	wrw RB
+	ldi 1
+	wrwb
 
 #Main loop end
 end	rdw R15            #simulation runtime loop

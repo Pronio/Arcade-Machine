@@ -37,7 +37,7 @@
 `define SCORE_ADDR_W 1 //2**1 = 2 registers
 
 `define START_BASE 1052 //registers 0x4000
-`define START_ADDR_W 1 //2**1 = 2 registers
+`define START_ADDR_W 0 //2**1 = 1 registers
 
 
 

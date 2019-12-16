@@ -20,6 +20,7 @@ module xtop (
 	     output [6:0]	  seg,
 	     input                PS2C,
 	     input                PS2D,
+             input           btn,
 	     output 		  dp,
              output               HSYNC,
              output               VSYNC,
@@ -79,6 +80,7 @@ module xtop (
    wire [7:0]			  cathode_aux;
    wire [8:0]			  paddle1;
    wire [8:0]			  paddle2;
+   wire			          start;
 
    assign dp = cathode_aux[7];
    assign seg = cathode_aux[6:0];
@@ -170,7 +172,10 @@ module xtop (
 
                                //paddle ps2
                                .paddle1(paddle1),
-                               .paddle2(paddle2)
+                               .paddle2(paddle2),
+                               
+                               //start register
+                               .start(start)
                                );
    
    //
@@ -191,7 +196,7 @@ module xtop (
 		   );
 
    paddleController
-   #(.COUNT(5000000), .MOTION_STEP(5) )	keyboard(
+   #(.COUNT(5000000), .MOTION_STEP(10), .PADDLE_LENGTH(80) )	keyboard(
   		.clk(clk),             // Input clock, 50MHz
   		.rst(rst),             // Reset signal
   		.ps2Clk(PS2C),          // PS/2 input clock, 10-16.7MHz
@@ -199,6 +204,13 @@ module xtop (
   		.paddle1(paddle1),
   		.paddle2(paddle2)       
   	);
+
+   start_register start_r(
+                .clk(clk),
+                .rst(rst),
+                .button(btn),
+                .start(start)
+        );
 
     vgadisplay display(
                 .clk(clk),

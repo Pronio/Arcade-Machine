@@ -49,3 +49,9 @@ NET "OutGreen<0>"  LOC = "F14"  | DRIVE = 2  | PULLUP ; # Bank = 1, Signal name 
 NET "OutBlue<2>"  LOC = "J13"  | DRIVE = 2  | PULLUP ; # Bank = 1, Signal name = BLU2
 NET "OutBlue<1>"  LOC = "H13"  | DRIVE = 2  | PULLUP ; # Bank = 1, Signal name = BLU1 
 
+#Pin assignement for button
+NET "btn" LOC = "A7";  # Bank = 1, Signal name = BTN3
+#NET "btn<2>" LOC = "M4";  # Bank = 0, Signal name = BTN2
+#NET "btn<1>" LOC = "C11"; # Bank = 2, Signal name = BTN1
+#NET "btn<0>" LOC = "G12"; # Bank = 0, Signal name = BTN0
+

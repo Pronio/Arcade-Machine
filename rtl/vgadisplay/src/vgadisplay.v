@@ -120,7 +120,7 @@ module vgadisplay
 		.Px(paddle_1),
 		.Py(10'd30),
 		.W(10'd10),
-		.H(9'd40),
+		.H(9'd80),
     		.detected(detected[3])
 		);
 
@@ -130,7 +130,7 @@ module vgadisplay
 		.Px(paddle_2),
 		.Py(10'd600),
 		.W(10'd10),
-		.H(9'd40),
+		.H(9'd80),
     		.detected(detected[2])
 		);
 

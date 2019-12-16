@@ -17,6 +17,7 @@ module xaddr_decoder (
 		      
 		      input [8:0]         paddle1,
                       input [8:0]         paddle2,
+		      input               start,
 
 `ifdef DEBUG	
 	              output reg          cprt_sel,
@@ -39,6 +40,7 @@ module xaddr_decoder (
 
     reg paddle1_sel;
     reg paddle2_sel;
+	 reg start_sel;
 
    
    //select module
@@ -56,6 +58,7 @@ module xaddr_decoder (
       paddle1_sel = 1'b0;
       paddle2_sel = 1'b0;
       object_sel = 1'b0;
+      start_sel = 1'b0;
 
       //mask offset and compare with base
       if ( (addr & {  {`ADDR_W-`MEM_ADDR_W{1'b1}}, {`MEM_ADDR_W{1'b0}}  }) == `MEM_BASE)
@@ -74,6 +77,8 @@ module xaddr_decoder (
         paddle2_sel = sel; 
       else if ( (addr &  {  {`ADDR_W-`OBJECT_ADDR_W{1'b1}}, {`OBJECT_ADDR_W{1'b0}}  }) == `OBJECT_BASE)
         object_sel = sel; 
+      else if ( (addr &  {  {`ADDR_W-`START_ADDR_W{1'b1}}, {`START_ADDR_W{1'b0}}  }) == `START_BASE)
+        start_sel = sel; 
       else
           trap_sel = sel;
    end
@@ -90,6 +95,8 @@ module xaddr_decoder (
 	data_to_rd = {23'b0,paddle1};
       else if(paddle2_sel)
 	data_to_rd = {23'b0,paddle2};
+      else if(start_sel)
+	data_to_rd = {31'b0,start};
 `ifndef NO_EXT
       else if(ext_sel)
         data_to_rd = ext_data_to_rd;
