@@ -81,9 +81,11 @@ module xtop (
    wire [8:0]			  paddle1;
    wire [8:0]			  paddle2;
    wire			          start;
+   wire                           rst_aux;
 
    assign dp = cathode_aux[7];
    assign seg = cathode_aux[6:0];
+   assign rst_aux = rst || rst_out;
  
    
    
@@ -92,7 +94,7 @@ module xtop (
    //
    xctrl controller (
 		     .clk(clk), 
-		     .rst(rst),
+		     .rst(rst_aux),
 		     
 		     // Program memory interface
 		     .pc(pc),
@@ -186,7 +188,7 @@ module xtop (
 
    segDisplay segment (
 		   .clk(clk),
-		   .rst(rst),
+		   .rst(rst_aux),
 		   .sel(score_sel & data_we),
 		   .addr(data_addr[`SCORE_ADDR_W-1:0]),
 		   .data_in(data_to_wr[0]),
@@ -196,9 +198,9 @@ module xtop (
 		   );
 
    paddleController
-   #(.COUNT(5000000), .MOTION_STEP(10), .PADDLE_LENGTH(80) )	keyboard(
+   #(.COUNT(2500000), .MOTION_STEP(10), .PADDLE_LENGTH(80) )	keyboard(
   		.clk(clk),             // Input clock, 50MHz
-  		.rst(rst),             // Reset signal
+  		.rst(rst_aux),             // Reset signal
   		.ps2Clk(PS2C),          // PS/2 input clock, 10-16.7MHz
   		.ps2Data(PS2D),         // PS/2 data
   		.paddle1(paddle1),
@@ -207,14 +209,14 @@ module xtop (
 
    start_register start_r(
                 .clk(clk),
-                .rst(rst),
+                .rst(rst_aux),
                 .button(btn),
                 .start(start)
         );
 
     vgadisplay display(
                 .clk(clk),
-                .rst(rst),
+                .rst(rst_aux),
                 .sel(display_sel & data_we),
                 .addr(data_addr[`OBJECT_ADDR_W-1:0]),
                 .data_in(data_to_wr[9:0]),

@@ -159,17 +159,17 @@ module segDisplay (
    always @(displayValue)
    begin
       case(displayValue)
-         4'd0: cathode <= 7'b1000000; // "0"     
-         4'd1: cathode <= 7'b1111001; // "1" 
-         4'd2: cathode <= 7'b0100100; // "2" 
-         4'd3: cathode <= 7'b0110000; // "3" 
-         4'd4: cathode <= 7'b0011001; // "4" 
-         4'd5: cathode <= 7'b0010010; // "5" 
-         4'd6: cathode <= 7'b0000010; // "6" 
-         4'd7: cathode <= 7'b1111000; // "7" 
-         4'd8: cathode <= 7'b0000000; // "8"     
-         4'd9: cathode <= 7'b0010000; // "9" 
-         default: cathode <= 7'b0111111; // "-"
+         4'd0: cathode <= 8'b11000000; // "0"     
+         4'd1: cathode <= 8'b11111001; // "1" 
+         4'd2: cathode <= 8'b10100100; // "2" 
+         4'd3: cathode <= 8'b10110000; // "3" 
+         4'd4: cathode <= 8'b10011001; // "4" 
+         4'd5: cathode <= 8'b10010010; // "5" 
+         4'd6: cathode <= 8'b10000010; // "6" 
+         4'd7: cathode <= 8'b11111000; // "7" 
+         4'd8: cathode <= 8'b10000000; // "8"     
+         4'd9: cathode <= 8'b10010000; // "9" 
+         default: cathode <= 8'b10111111; // "-"
       endcase
     end
 
@@ -180,4 +180,5 @@ module segDisplay (
 	else
 		rst_out <= 0;
     end
+
 endmodule

@@ -13,7 +13,7 @@
 #Initializations
 	ldi 300000         #simulatiom runtime
 	wrw R15
-	ldi 30000          #delay time
+	ldi 15000          #delay time
 	wrw R14	
 	ldi 1              #inicialization of the R0
 	wrw R0
@@ -28,6 +28,16 @@
 	wrw R1
 	ldi 310
 	wrw R2
+	wrwb
+	ldi 2              #inicialization of the paddle position
+	addi OBJECT_BASE
+	wrw RB
+	ldi 200
+	wrwb
+	ldi 3
+	addi OBJECT_BASE
+	wrw RB
+	ldi 200
 	wrwb
 
 #Start register
@@ -57,7 +67,7 @@ mainl 	ldi 2              #update of paddle1 position
 	rdw R14            #delay loop
 	bneqi mainl
 	wrw R14
-	ldi 30000
+	ldi 15000
 	wrw R14
 
 #Ball movement
