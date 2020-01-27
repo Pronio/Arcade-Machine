@@ -11,7 +11,7 @@
 # R6  move_direction_up_down
 
 #Initializations
-	ldi 300000         #simulatiom runtime
+	ldi 10         #simulatiom runtime
 	wrw R15
 	ldi 15000          #delay time
 	wrw R14	

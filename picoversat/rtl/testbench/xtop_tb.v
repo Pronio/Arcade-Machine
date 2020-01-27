@@ -13,6 +13,8 @@ module xtop_tb;
    reg clk;
    reg rst;
    wire trap;
+
+   reg btn;
    
 `ifndef NO_EXT
    //external parallel interface
@@ -33,7 +35,7 @@ module xtop_tb;
    wire               VSYNC;
    wire [2:0]         OutRed;
    wire [2:0]         OutGreen;
-   wire [1:0]         OutBlue;
+   wire [2:0]         OutBlue;
 
 
    //iterator and timer
@@ -46,7 +48,8 @@ module xtop_tb;
    xtop uut (
 	     .clk(clk),
              .rst(rst),
-             .trap(trap)
+             .trap(trap),
+             .btn(btn)
 	     
 `ifndef NO_EXT
    	     // external parallel interface
@@ -364,23 +367,29 @@ module xtop_tb;
       $dumpfile("xtop.vcd");
       $dumpvars(0,xtop_tb);
 `endif
+
+      //
+      // Run picoVersat
+      //
+      start_time = $time;
         
       // Initialize Inputs
       clk = 1;
       rst = 0;
       ps2Clk = 1;
       ps2Data = 1;  
+      btn = 0;
       
      // assert reset for 1 clock cycle
       #(clk_period+1)
       rst = 1;
       #clk_period;
       rst = 0;
-      
-      //
-      // Run picoVersat
-      //
-      start_time = $time;
+
+      #1000
+      btn = 1;
+      #1000
+      btn = 0;
 
       #20000000;
       wKey();
