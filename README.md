@@ -8,6 +8,8 @@ For this project, the picoVersat - minimal hardware controller - will be used as
 ````
 .
 ├── docs
+|   └── Initial User Guide
+|   |   └──Arcade_Machine_Initial_User_Guide.pdf    #User Manual before development of Arcade Machine
 │   └── Arcade_Machine_User_Guide.pdf     # User Manual
 ├── picoversat
 │   ├── fpga                          
